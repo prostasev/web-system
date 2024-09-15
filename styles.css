@@ -1,0 +1,216 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    /* Высота заголовка и основного контента */
+    grid-template-columns: 25% 1fr;
+    /* Ширина панелей */
+    height: 100vh;
+}
+
+.header {
+    grid-column: 1 / 3;
+    /* Заголовок занимает всю ширину */
+    display: flex;
+    align-items: flex-end;
+    /* Выравнивание по нижнему краю */
+    background: yellow;
+    /* Жёлтый фон для заголовка */
+    padding: 10px;
+    /* Отступы для заголовка */
+}
+
+.logo {
+    max-width: 200px;
+    /* Максимальная ширина логотипа */
+    margin-right: 10px;
+    /* Отступ справа от логотипа */
+    background: #f0e68c;
+    /* Фон под логотипом */
+    padding: 5px;
+    /* Отступы для логотипа */
+}
+
+.title {
+    text-align: center;
+    /* Центрирование заголовка */
+    flex-grow: 1;
+    /* Позволяет заголовку занимать оставшееся пространство */
+    background: yellow;
+    /* Жёлтый фон для заголовка */
+    padding: 10px;
+    /* Отступы для заголовка */
+    border: none;
+    /* Убираем пунктирную рамку у заголовка */
+}
+
+.navigation {
+    grid-column: 1;
+    /* Первая колонка */
+    background: #dcdcdc;
+    /* Цвет фона панели навигации */
+    padding: 10px;
+    /* Отступы для навигации */
+    border: 1px dashed #000;
+    /* Пунктирная рамка для навигации */
+    margin: 0;
+    /* Удалите все отступы */
+    height: 100%;
+    /* Устанавливаем высоту на 100% */
+}
+
+.content {
+    grid-column: 2;
+    /* Вторая колонка */
+    display: flex;
+    padding: 10px;
+}
+
+article {
+    flex: 1;
+    /* Основной документ занимает всю оставшуюся ширину */
+    border: 1px dashed #000;
+    /* Дашированная рамка для статьи */
+    background: #ffffff;
+    padding: 10px;
+}
+
+.sidebar {
+    border: 1px dashed #000;
+    /* Дашированная рамка для боковой панели */
+    background: #e0f7fa;
+    /* Голубой фон для боковой панели */
+    padding: 10px;
+}
+
+.sidebar ul {
+    padding-left: 0;
+    /* Убираем отступы у списков */
+    list-style-type: none;
+    /* Убираем маркеры у списков */
+    margin: 0;
+    /* Убираем отступы у ul */
+}
+
+.sidebar li {
+    text-align: left;
+    /* Выравнивание текста в списке по левому краю */
+    color: blue;
+    /* Синий цвет для ссылок */
+    margin: 0;
+    /* Убираем отступы между ссылками */
+    padding: 5px 0;
+    /* Отступы сверху и снизу для ссылок */
+}
+
+.sidebar li a {
+    text-decoration: none;
+    /* Убираем подчеркивание */
+    color: blue;
+    /* Синий цвет ссылки */
+    background: #e0f7fa;
+    /* Голубой фон для ссылок */
+    display: flex;
+    /* Изменяем на flex для выравнивания изображений и текста */
+    align-items: center;
+    /* Центрируем элементы по вертикали */
+    padding: 5px;
+    /* Отступы вокруг текста ссылки */
+}
+
+.sidebar li a img {
+    width: 16px;
+    /* Ширина изображения */
+    height: 16px;
+    /* Высота изображения */
+    margin-right: 5px;
+    /* Отступ справа от изображения */
+}
+
+.sidebar li:hover {
+    background: #b2ebf2;
+    /* Более темный голубой фон при наведении */
+}
+
+/* Медиазапросы для адаптивности */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        /* Одна колонка для мобильных устройств */
+    }
+
+    .header {
+        flex-direction: column;
+        /* Вертикальная компоновка заголовка */
+        align-items: center;
+        /* Центрирование заголовка */
+        padding: 10px;
+        /* Отступы для мобильных */
+    }
+
+    .logo {
+        margin: 10px 0;
+        /* Центрирование логотипа с отступом сверху и снизу */
+        padding: 5px;
+        /* Отступы для логотипа */
+    }
+
+    .navigation {
+        grid-column: 1;
+        /* Полная ширина для навигации */
+    }
+
+    .content {
+        flex-direction: column;
+        /* Вертикальная компоновка для контента */
+    }
+
+    .sidebar {
+        flex: 1;
+        /* Боковая панель занимает всю ширину на мобильных */
+        border: none;
+        /* Убираем рамку для боковой панели на мобильных */
+        background: #e0f7fa;
+        /* Голубой фон для боковой панели на мобильных */
+        padding: 10px;
+        /* Отступы для мобильных */
+    }
+
+    .sidebar ul {
+        display: block;
+        /* Отображаем список ссылок */
+    }
+
+    .sidebar li {
+        margin-bottom: 10px;
+        /* Отступ между ссылками */
+    }
+
+    .title h1 {
+        font-size: 1.5em;
+        /* Уменьшение размера заголовка */
+    }
+}
+
+footer {
+    grid-column: 1 / 3;
+    /* Подвал занимает всю ширину */
+    background: #ffffff;
+    /* Белый фон для подвала */
+    padding: 10px;
+    /* Отступы для подвала */
+    text-align: center;
+    /* Центрирование текста */
+    border-top: 1px dashed #000;
+    /* Пунктирная линия сверху */
+    margin-top: 20px;
+    /* Увеличенный отступ сверху для отделения от навигации */
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Практические задания на JavaScript</title>
+    <ul>
+        <li><a href="index.html">Лабораторная работа № 1</a></li>
+        <li><a href="lab2js.html">Лабораторная работа № 2</a></li>
+        <li><a href="lab3js.html">Лабораторная работа № 3</a></li>
+        <li><a href="lab4js.html">Лабораторная работа № 4</a></li>
+        <li><a href="lab5.html">Лабораторная работа № 5</a></li>
+        <li><a href="lab6.html">Лабораторная работа № 6</a></li>
+    </ul>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Практические задания на JavaScript</h1>
+
+    <button onclick="secondLastWord()">Второе с конца слово</button>
+    <button onclick="areAnagrams()">Проверка анаграмм</button>
+    <button onclick="removeVowels()">Удалить гласные</button>
+    <button onclick="generateRandomArray()">Сгенерировать массив</button>
+    <button onclick="generateRandomString()">Сгенерировать строку</button>
+    <button onclick="countAndSumDivisibleByThree(randomArray)">Сумма и количество делящихся на 3</button>
+    <button onclick="bubbleSort(randomArray.slice())">Сортировка пузырьком</button>
+    <button onclick="hoursBetweenDates()">Часы между датами</button>
+    <button onclick="secondsUntilEndOfDay()">Секунды до конца дня</button>
+    <button onclick="randomDatesDifference()">Разница между датами</button>
+
+    <script>
+        let randomArray = [];
+
+        function secondLastWord() {
+            const input = prompt("Введите строку:");
+            const words = input.split(" ");
+            if (words.length < 2) {
+                alert("Недостаточно слов в строке.");
+            } else {
+                alert(`Второе с конца слово: ${words[words.length - 2]}`);
+            }
+        }
+
+        function areAnagrams() {
+            const str1 = prompt("Введите первую строку:");
+            const str2 = prompt("Введите вторую строку:");
+            const sortedStr1 = str1.split("").sort().join("");
+            const sortedStr2 = str2.split("").sort().join("");
+            alert(`Анаграммы: ${sortedStr1 === sortedStr2}`);
+        }
+
+        function removeVowels() {
+            const input = prompt("Введите строку:");
+            const consonants = input.split("").filter(char => !'aeiouAEIOUуУеЕыЫаАоОэЭяЯиИюЮ'.includes(char)).join("");
+            alert(`Строка без гласных: ${consonants}`);
+        }
+
+        function generateRandomArray() {
+            randomArray = Array.from({
+                length: 10
+            }, () => Math.floor(Math.random() * 101) + 100);
+            console.log("Случайный массив:", randomArray);
+            alert("Случайный массив сгенерирован и выведен в консоль.");
+        }
+
+        function generateRandomString() {
+            const length = 10;
+            const randomString = Array.from({
+                length
+            }, () => String.fromCharCode(Math.random() * 26 + 97)).join("");
+            console.log("Случайная строка:", randomString);
+            alert("Случайная строка сгенерирована и выведена в консоль.");
+        }
+
+        function countAndSumDivisibleByThree(arr) {
+            const filtered = arr.filter(num => num % 3 === 0);
+            const count = filtered.length;
+            const sum = filtered.reduce((acc, num) => acc + num, 0);
+            alert(`Количество: ${count}, Сумма: ${sum}`);
+        }
+
+        function bubbleSort(arr) {
+            for (let i = 0; i < arr.length; i++) {
+                for (let j = 0; j < arr.length - 1 - i; j++) {
+                    if (arr[j] > arr[j + 1]) {
+                        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                    }
+                }
+            }
+            console.log("Отсортированный массив:", arr);
+            alert("Массив отсортирован и выведен в консоль.");
+        }
+
+        function hoursBetweenDates() {
+            const startDate = new Date('1988-08-13T10:00:00');
+            const endDate = new Date('2033-12-22T17:00:00');
+            const hours = Math.abs((endDate - startDate) / 36e5);
+            alert(`Количество часов: ${hours}`);
+        }
+
+        function secondsUntilEndOfDay() {
+            const now = new Date();
+            const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+            const seconds = Math.floor((endOfDay - now) / 1000);
+            alert(`Количество секунд до конца дня: ${seconds}`);
+        }
+
+        function randomDatesDifference() {
+            const startDate = new Date('2000-01-01');
+            const endDate = new Date('2020-01-01');
+            const dates = Array.from({
+                length: 10
+            }, () => {
+                const randomTime = Math.random() * (endDate - startDate) + startDate.getTime();
+                return new Date(randomTime);
+            });
+
+            dates.sort((a, b) => a - b);
+            const difference = Math.abs((dates[1] - dates[0]) / 1000);
+            console.log("Случайные даты:", dates);
+            console.log(`Разница в секундах между ближайшими: ${difference}`);
+            alert(`Разница в секундах между ближайшими датами: ${difference}`);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление бригадой</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #output {
+            margin-top: 20px;
+            white-space: pre-wrap; /* Для отображения отформатированного текста */
+        }
+    </style>
+</head>
+<body>
+    <h1>Управление бригадой</h1>
+    <button id="createTeamButton">Создать бригаду</button>
+    <div id="output"></div>
+
+    <script>
+        class Worker {
+            constructor(firstName, lastName, dailyRate, daysWorked) {
+                this.firstName = firstName;
+                this.lastName = lastName;
+                this.dailyRate = dailyRate;
+                this.daysWorked = daysWorked;
+            }
+
+            getSalary() {
+                return this.dailyRate * this.daysWorked;
+            }
+
+            toString() {
+                return `${this.firstName} ${this.lastName}, зарплата: ${this.getSalary()}`;
+            }
+        }
+
+        class Specialist extends Worker {
+            constructor(firstName, lastName, dailyRate, daysWorked, workType) {
+                super(firstName, lastName, dailyRate, daysWorked);
+                this.workType = workType;
+            }
+
+            toString() {
+                return `${super.toString()}, тип работ: ${this.workType}`;
+            }
+        }
+
+        class Team {
+            constructor() {
+                this.workers = [];
+            }
+
+            addWorker(worker) {
+                this.workers.push(worker);
+            }
+
+            getTotalSalary() {
+                return this.workers.reduce((total, worker) => total + worker.getSalary(), 0);
+            }
+
+            toString() {
+                return this.workers.map(worker => worker.toString()).join('\n');
+            }
+        }
+
+        document.getElementById('createTeamButton').addEventListener('click', () => {
+            const team = new Team();
+            const painter = new Specialist("Иван", "Иванов", 1000, 20, "маляр");
+            const plasterer = new Specialist("Петр", "Петров", 1200, 15, "штукатур");
+
+            team.addWorker(painter);
+            team.addWorker(plasterer);
+
+            const output = document.getElementById('output');
+            output.textContent = `Состав бригады:\n${team.toString()}\nОбщая зарплата бригады: ${team.getTotalSalary()}`;
+        });
+    </script>
+</body>
+</html>

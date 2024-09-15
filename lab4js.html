@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наследование в JavaScript</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #controls {
+            margin-top: 20px;
+        }
+
+        button {
+            margin: 5px;
+        }
+
+        canvas {
+            border: 1px solid black;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li><a href="index.html">Лабораторная работа № 1</a></li>
+        <li><a href="lab2js.html">Лабораторная работа № 2</a></li>
+        <li><a href="lab3js.html">Лабораторная работа № 3</a></li>
+        <li><a href="lab4js.html">Лабораторная работа № 4</a></li>
+        <li><a href="lab5.html">Лабораторная работа № 5</a></li>
+        <li><a href="lab6.html">Лабораторная работа № 6</a></li>
+    </ul>
+    <h1>Наследование в JavaScript</h1>
+    <button id="createTeamButton">Создать бригаду</button>
+    <button id="testButton">Запустить тест класса Vector</button>
+    <button id="testButton1">Запустить тест класса Task</button>
+    <button id="testButton2">Поиск ближайшей точки</button>
+    <button id="createFigureButton">Создать фигуру</button>
+
+    <button id="hideButtonsButton" style="display: none;">Скрыть фигуры</button>
+    <div id="controls"></div>
+    <pre id="output"></pre>
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+    <script>
+        class Vector {
+            constructor(x, y, z) {
+                this._x = x;
+                this._y = y;
+                this._z = z;
+            }
+
+            get x() {
+                return this._x;
+            }
+
+            get y() {
+                return this._y;
+            }
+
+            get z() {
+                return this._z;
+            }
+
+            plus(vector) {
+                return new Vector(this.x + vector.x, this.y + vector.y, this.z + vector.z);
+            }
+
+            scalar(vector) {
+                return this.x * vector.x + this.y * vector.y + this.z * vector.z;
+            }
+
+            get length() {
+                return Math.sqrt(this.x ** 2 + this.y ** 2 + this.z ** 2);
+            }
+
+            toString() {
+                return `Vector(${this.x}, ${this.y}, ${this.z})`;
+            }
+
+            valueOf() {
+                return this.length;
+            }
+        }
+
+        document.getElementById('testButton').addEventListener('click', () => {
+            const vector1 = new Vector(1, 2, 3);
+            const vector2 = new Vector(4, 5, 6);
+            const output = document.getElementById('output');
+
+            output.textContent = ''; // Очистка предыдущего вывода
+
+            output.textContent += vector1.toString() + '\n'; // Vector(1, 2, 3)
+            output.textContent += vector2.toString() + '\n'; // Vector(4, 5, 6)
+
+            const sum = vector1.plus(vector2);
+            output.textContent += sum.toString() + '\n'; // Vector(5, 7, 9)
+
+            const scalarProduct = vector1.scalar(vector2);
+            output.textContent += `Скалярное произведение: ${scalarProduct}\n`; // 32
+
+            output.textContent += `Длина vector1: ${vector1.length}\n`; // Длина vector1
+            output.textContent += `Длина vector2: ${vector2.length}\n`; // Длина vector2
+        });
+        class Task {
+            constructor(title, description, startDate, endDate) {
+                this.title = title;
+                this.description = description;
+                this.startDate = new Date(startDate);
+                this.endDate = new Date(endDate);
+                this.subtasks = [];
+            }
+
+            addSubtask(subtask) {
+                this.subtasks.push(subtask);
+            }
+
+            toString() {
+                return `Задача: ${this.title}\nОписание: ${this.description}\nНачало: ${this.startDate.toLocaleString()}\nКонец: ${this.endDate.toLocaleString()}\nПодзадачи: ${this.subtasks.length}`;
+            }
+        }
+
+        class ExecutedTask extends Task {
+            constructor(title, description, startDate, endDate) {
+                super(title, description, startDate, endDate);
+                this.progress = 0; // Процент выполнения
+                this.isCompleted = false; // Флаг завершения задачи
+            }
+
+            setProgress(percent) {
+                this.progress = Math.max(0, Math.min(100, percent)); // Ограничение от 0 до 100
+                if (this.progress === 100) {
+                    this.isCompleted = true;
+                }
+            }
+
+            toString() {
+                return `${super.toString()}\nПроцент выполнения: ${this.progress}%\nЗавершена: ${this.isCompleted}`;
+            }
+        }
+
+        document.getElementById('testButton1').addEventListener('click', () => {
+            const task1 = new Task('Изучить JavaScript', 'Изучить основы JavaScript', '2023-09-01',
+                '2023-09-30');
+            const executedTask1 = new ExecutedTask('Изучить асинхронный JavaScript',
+                'Изучить Promises и async/await', '2023-09-15', '2023-09-25');
+
+            executedTask1.setProgress(50); // Установка прогресса
+
+            task1.addSubtask(executedTask1); // Добавление подзадачи
+
+            const output = document.getElementById('output');
+            output.textContent = ''; // Очистка предыдущего вывода
+            output.textContent += task1.toString() + '\n\n';
+            output.textContent += executedTask1.toString();
+        });
+        class Point {
+            constructor(x, y, z, name) {
+                this.x = x; // Координата x
+                this.y = y; // Координата y
+                this.z = z; // Координата z
+                this.name = name; // Имя точки
+            }
+
+            getCoordinates() {
+                return {
+                    x: this.x,
+                    y: this.y,
+                    z: this.z
+                };
+            }
+
+            getName() {
+                return this.name;
+            }
+
+            distanceTo(otherPoint) {
+                const dx = this.x - otherPoint.x;
+                const dy = this.y - otherPoint.y;
+                const dz = this.z - otherPoint.z;
+                return Math.sqrt(dx * dx + dy * dy + dz * dz);
+            }
+        }
+
+        class ColorPoint extends Point {
+            constructor(x, y, z, name, color) {
+                super(x, y, z, name); // Вызов конструктора родительского класса
+                this.color = color; // Цвет точки
+            }
+
+            getColor() {
+                return this.color;
+            }
+
+            changeColor(newColor) {
+                this.color = newColor; // Изменение цвета
+            }
+
+            getInfo() {
+                const coords = this.getCoordinates();
+                return `Точка ${this.getName()} с цветом ${this.getColor()} на координатах (${coords.x}, ${coords.y}, ${coords.z})`;
+            }
+        }
+
+        // Функция для поиска ближайшей точки
+        function findNearestPoint(points, targetPoint) {
+            let nearestPoint = null;
+            let minDistance = Infinity;
+
+            for (const point of points) {
+                const distance = point.distanceTo(targetPoint);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestPoint = point;
+                }
+            }
+
+            return nearestPoint;
+        }
+
+        document.getElementById('testButton2').addEventListener('click', () => {
+            const points = [
+                new Point(1, 2, 3, 'A'),
+                new ColorPoint(4, 5, 6, 'B', 'red'),
+                new ColorPoint(7, 8, 9, 'C', 'blue'),
+                new Point(0, 0, 0, 'D')
+            ];
+
+            const target = new Point(5, 5, 5, 'Target');
+            const nearest = findNearestPoint(points, target);
+
+            const output = document.getElementById('output');
+            output.textContent = nearest instanceof ColorPoint ?
+                nearest.getInfo() :
+                `Ближайшая точка к Target: ${nearest.getName()} на координатах (${nearest.getCoordinates().x}, ${nearest.getCoordinates().y}, ${nearest.getCoordinates().z})`;
+        });
+        class Figure {
+            constructor(points) {
+                this.points = points; // Массив точек {x, y}
+            }
+            draw(context) {}
+        }
+
+        class Circle extends Figure {
+            constructor(radius) {
+                super([]);
+                this.radius = radius;
+                this.x = 200; // Центр по X
+                this.y = 200; // Центр по Y
+            }
+
+            area() {
+                return Math.PI * this.radius * this.radius;
+            }
+
+            perimeter() {
+                return 2 * Math.PI * this.radius;
+            }
+
+            draw(context) {
+                context.beginPath();
+                context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                context.stroke();
+            }
+        }
+
+        class Square extends Figure {
+            constructor(side) {
+                super([]);
+                this.side = side;
+                this.x = 200 - side / 2; // Начальная точка по X
+                this.y = 200 - side / 2; // Начальная точка по Y
+            }
+
+            area() {
+                return this.side * this.side;
+            }
+
+            perimeter() {
+                return 4 * this.side;
+            }
+
+            draw(context) {
+                context.beginPath();
+                context.rect(this.x, this.y, this.side, this.side);
+                context.stroke();
+            }
+        }
+
+        class Triangle extends Figure {
+            constructor(a, b, c) {
+                super([]);
+                this.a = a; // Сторона a
+                this.b = b; // Сторона b
+                this.c = c; // Сторона c
+                this.points = [{
+                        x: 200,
+                        y: 200
+                    }, // Вершина 1
+                    {
+                        x: 200 + b,
+                        y: 200
+                    }, // Вершина 2
+                    {
+                        x: 200 + b / 2,
+                        y: 200 - (Math.sqrt(3) / 2) * a
+                    } // Вершина 3
+                ];
+            }
+
+            area() {
+                const s = this.perimeter() / 2; // Полупериметр
+                return Math.sqrt(s * (s - this.a) * (s - this.b) * (s - this.c));
+            }
+
+            perimeter() {
+                return this.a + this.b + this.c;
+            }
+
+            draw(context) {
+                context.beginPath();
+                context.moveTo(this.points[0].x, this.points[0].y);
+                context.lineTo(this.points[1].x, this.points[1].y);
+                context.lineTo(this.points[2].x, this.points[2].y);
+                context.closePath();
+                context.stroke();
+            }
+        }
+
+        document.getElementById('createFigureButton').addEventListener('click', () => {
+            const controls = document.getElementById('controls');
+            controls.innerHTML = `
+                <button id="createCircleButton">Создать круг</button>
+                <button id="createSquareButton">Создать квадрат</button>
+                <button id="createTriangleButton">Создать треугольник</button>
+            `;
+            document.getElementById('hideButtonsButton').style.display = 'inline';
+
+            document.getElementById('createCircleButton').addEventListener('click', () => createCircle());
+            document.getElementById('createSquareButton').addEventListener('click', () => createSquare());
+            document.getElementById('createTriangleButton').addEventListener('click', () => createTriangle());
+        });
+
+        document.getElementById('hideButtonsButton').addEventListener('click', () => {
+            const controls = document.getElementById('controls');
+            controls.innerHTML = '';
+            document.getElementById('canvas').style.display = 'none';
+            document.getElementById('hideButtonsButton').style.display = 'none';
+            document.getElementById('output').innerHTML = '';
+        });
+
+        function createCircle() {
+            const radius = parseFloat(prompt("Введите радиус круга:"));
+            const circle = new Circle(radius);
+            drawFigure(circle);
+            showCalculations(circle);
+        }
+
+        function createSquare() {
+            const side = parseFloat(prompt("Введите длину стороны квадрата:"));
+            const square = new Square(side);
+            drawFigure(square);
+            showCalculations(square);
+        }
+
+        function createTriangle() {
+            const a = parseFloat(prompt("Введите длину стороны a:"));
+            const b = parseFloat(prompt("Введите длину стороны b:"));
+            const c = parseFloat(prompt("Введите длину стороны c:"));
+            const triangle = new Triangle(a, b, c);
+            drawFigure(triangle);
+            showCalculations(triangle);
+        }
+
+        function drawFigure(figure) {
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height); // Очистка канваса
+            figure.draw(context);
+            document.getElementById('canvas').style.display = 'block'; // Показываем канвас
+        }
+
+        function showCalculations(figure) {
+            const output = document.getElementById('output');
+            output.innerHTML = `
+                <button onclick="alert('Площадь: ${figure.area().toFixed(2)}')">Вычислить площадь</button>
+                <button onclick="alert('Периметр: ${figure.perimeter().toFixed(2)}')">Вычислить периметр</button>
+            `;
+        }
+        class Worker {
+            constructor(firstName, lastName, dailyRate, daysWorked) {
+                this.firstName = firstName;
+                this.lastName = lastName;
+                this.dailyRate = dailyRate;
+                this.daysWorked = daysWorked;
+            }
+
+            getSalary() {
+                return this.dailyRate * this.daysWorked;
+            }
+
+            toString() {
+                return `${this.firstName} ${this.lastName}, зарплата: ${this.getSalary()}`;
+            }
+        }
+
+        class Specialist extends Worker {
+            constructor(firstName, lastName, dailyRate, daysWorked, workType) {
+                super(firstName, lastName, dailyRate, daysWorked);
+                this.workType = workType;
+            }
+
+            toString() {
+                return `${super.toString()}, тип работ: ${this.workType}`;
+            }
+        }
+
+        class Team {
+            constructor() {
+                this.workers = [];
+            }
+
+            addWorker(worker) {
+                this.workers.push(worker);
+            }
+
+            getTotalSalary() {
+                return this.workers.reduce((total, worker) => total + worker.getSalary(), 0);
+            }
+
+            toString() {
+                return this.workers.map(worker => worker.toString()).join('\n');
+            }
+        }
+
+        document.getElementById('createTeamButton').addEventListener('click', () => {
+            const team = new Team();
+            const painter = new Specialist("Иван", "Иванов", 1000, 20, "маляр");
+            const plasterer = new Specialist("Петр", "Петров", 1200, 15, "штукатур");
+
+            team.addWorker(painter);
+            team.addWorker(plasterer);
+
+            const output = document.getElementById('output');
+            output.textContent =
+                `Состав бригады:\n${team.toString()}\nОбщая зарплата бригады: ${team.getTotalSalary()}`;
+        });
+    </script>
+</body>
+
+</html>
